@@ -35,6 +35,8 @@
 - set:
     - oid: "/agent:Agt_A/rpcprovider:"
       value: "${TA_RPCPROVIDER}"
+    - oid: "/agent:Agt_B/rpcprovider:"
+      value: "${TA_RPCPROVIDER}"
 
 - register:
     - oid: "/local/conf"

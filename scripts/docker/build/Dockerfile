@@ -109,10 +109,13 @@ RUN set -eux; \
       'Cflags: -I${includedir}' \
       > /usr/lib/x86_64-linux-gnu/pkgconfig/libsensors.pc
 
-# libfaketime: the LD_PRELOAD shim the security/clock test runs a program
-# under to prove expiry/rollover handling. Its own layer so the big apt
-# layer above stays cached.
-RUN apt-get update && apt-get install -y libfaketime && \
+# Late runtime tools, in their own layer so the big apt layer stays cached:
+#  - libfaketime: the LD_PRELOAD shim security/clock runs a program under
+#    to prove expiry/rollover handling;
+#  - mosquitto + clients: the MQTT broker Agt_A stands up and the
+#    mosquitto_pub/sub the device fleet on Agt_B drives in mqtt/fleet.
+RUN apt-get update && \
+    apt-get install -y libfaketime mosquitto mosquitto-clients && \
     rm -rf /var/lib/apt/lists/*
 
 RUN echo "${USER} ALL=NOPASSWD: ALL" >> /etc/sudoers

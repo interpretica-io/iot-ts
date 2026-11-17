@@ -63,5 +63,35 @@
                 <objective>Read the broker security posture and gate on it.</objective>
             </script>
         </run>
+
+        <!-- @page iot-mqtt-fleet Two-agent device fleet
+              @objective Drive a fleet of IoT device-clients on one agent
+                         against a gateway broker on another, and confirm the
+                         gateway ingests every device's telemetry.
+
+              @par Scenario:
+              -# Open an RPC server and job factory on Agt_A (gateway) and
+                 Agt_B (fleet).
+              -# SKIP unless both agents have an MQTT client.
+              -# Stand an anonymous mosquitto broker up on Agt_A; SKIP if it
+                 will not start.
+              -# For each fleet size, publish one retained telemetry message
+                 per device from Agt_B, then collect them all on the gateway.
+              -# Fail if the gateway received fewer messages than devices.
+              -# Graph publish throughput and ingest time against fleet size.
+
+              @par Expected Results:
+              - No broker/clients on the agents: SKIPPED.
+              - Otherwise: every device's telemetry reaches the gateway.
+        -->
+        <run>
+            <script name="fleet">
+                <objective>
+                    A fleet of device-clients on Agt_B against a gateway
+                    broker on Agt_A; confirm full telemetry ingest.
+                    @md
+                </objective>
+            </script>
+        </run>
     </session>
 </package>

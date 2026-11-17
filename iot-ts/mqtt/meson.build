@@ -1,5 +1,5 @@
 # Copyright (C) 2026 Interpretica Unipessoal Lda
-tests = [ 'prologue', 'epilogue', 'pubsub', 'audit' ]
+tests = [ 'prologue', 'epilogue', 'pubsub', 'audit', 'fleet' ]
 foreach test : tests
     test_exe = test
     test_c = test + '.c'
