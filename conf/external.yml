@@ -114,13 +114,6 @@ repositories:
       - ta_watchdog
       - rpcs_watchdog
       - tapi_watchdog
-  - name: tsf_upnp
-    url: https://github.com/interpretica-io/tsf-upnp.git
-    ref: main
-    libs:
-      - ta_upnp
-      - rpcs_upnp
-      - tapi_upnp
 
   # ---- WiFi: engine TAPI + Configurator model; agent half only on a
   #      dedicated WiFi agent (inert on localhost) ----
