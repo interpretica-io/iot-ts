@@ -1,0 +1,37 @@
+/** @mainpage
+
+This suite exercises the major IoT technologies against the Test Agent it
+runs on, one group per technology, each emitting a measurement chart and,
+where it applies, a security audit with a known-bad control:
+
+- @ref iot-mqtt - MQTT publish/subscribe and a broker audit (tsf-mqtt);
+- @ref iot-coap - CoAP resource discovery, GET and an audit (tsf-coap);
+- @ref iot-lorawan - LoRaWAN frame codec, MIC and frame-counter reuse
+  (tsf-lorawan);
+- @ref iot-ieee802154 - IEEE 802.15.4 frame codec (the layer under Zigbee,
+  Thread and Matter) and frame-counter reuse (tsf-802154);
+- @ref iot-mdns - mDNS/DNS-SD service discovery and an audit (tsf-mdns);
+- @ref iot-ble - Bluetooth adapter scan and an audit (tsf-bluetooth);
+- @ref iot-wifi - WiFi station configuration (tsf-wifi);
+- @ref iot-gpio - GPIO/I2C/SPI bus access (tsf-gpio);
+- @ref iot-sensors - hardware monitoring, temperatures and limits
+  (tsf-sensors);
+- @ref iot-watchdog - the hardware watchdog (tsf-watchdog);
+- @ref iot-ics - Modbus register access and an industrial-control audit
+  (tsf-ics);
+- @ref iot-cwmp - the TR-069 (CWMP) message codec, round-tripped with no
+  ACS (tsf-cwmp);
+- @ref iot-security - the cross-cutting hardening layer: fuzzing a frame
+  parser and a fake-clock expiry probe (tsf-fuzz, tsf-time).
+
+The default localhost profile needs no radio, device or daemon: the
+pure-codec groups (lorawan, ieee802154, cwmp) and the fuzz layer run,
+while groups that need a broker, device, radio or bus SKIP cleanly when
+none is configured. Point conf/rcf.conf and the TSF_* environment (or
+TA_WIFI_A_HOST) at real hardware and the same tests exercise it.
+
+Every audit plants a known-bad control next to it: the assertion is that
+the audit reports the planted defect, so an audit that reports nothing is
+the failure, not a pass.
+
+*/

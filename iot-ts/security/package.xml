@@ -1,0 +1,103 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>Security: the cross-cutting hardening layer</description>
+
+    <!-- @page iot-security Security Tests
+          @objective Exercise the cross-cutting hardening tools against the
+                     agent the suite runs on: fuzz a frame parser, and probe
+                     a fake clock.
+
+          @par Test Groups:
+          - @ref iot-security-campaign - A fuzzing campaign from build to finding
+          - @ref iot-security-clock - A fake-clock expiry/rollover probe
+
+          @par Notes:
+          - Everything here needs a tool the agent may not have: clang with
+            -fsanitize=fuzzer,address for the campaign, libfaketime for the
+            clock. Without the tool the iteration SKIPs, which is a result
+            rather than a failure, so a plain localhost run stays green.
+          - The campaign takes about half a minute, so it carries the
+            LONG_TERM requirement and an ordinary run does not sit through it.
+    -->
+
+    <author mailto="maxim.menshikov@interpretica.io" />
+
+    <session track_conf="silent">
+        <prologue>
+            <script name="prologue">
+                <objective>
+                    Prepare the security group.
+                    @md
+                </objective>
+            </script>
+        </prologue>
+
+        <epilogue>
+            <script name="epilogue">
+                <objective>
+                    Finalize the security group.
+                    @md
+                </objective>
+            </script>
+        </epilogue>
+
+        <!-- @page iot-security-campaign A fuzzing campaign
+              @objective Check that a campaign runs, that it is seen to have
+                         run, and that the off-by-one planted in the target is
+                         found and reduced to one signature.
+
+              @par Scenario:
+              -# Open a session to the agent.
+              -# Check the agent can build a libFuzzer target at all.
+              -# Build a length-prefixed parser with a planted off-by-one.
+              -# Seed the corpus.
+              -# Run the campaign in slices, charting coverage over time.
+              -# Check the campaign executed inputs and moved coverage.
+              -# Collect and triage the artifacts.
+              -# Check the triage produced a finding.
+
+              @par Expected Results:
+              - Passes when clang with the fuzzer and address sanitizers is
+                there, skips when it is not.
+              - The progress check is the point: a harness that dies on
+                startup finds no crashes, and a test that only looks for
+                crashes would call that a pass.
+        -->
+        <run name="campaign">
+            <script name="campaign">
+                <objective>
+                    Fuzz a parser with a planted off-by-one.
+                    @md
+                </objective>
+                <req id="LONG_TERM"/>
+            </script>
+        </run>
+
+        <!-- @page iot-security-clock A fake-clock probe
+              @objective Run under a clock pushed far into the future and
+                         prove with a skew check that the libfaketime shim
+                         actually took effect, so an expiry/rollover probe
+                         cannot pass for the wrong reason.
+
+              @par Scenario:
+              -# Open a session to the agent.
+              -# Skip unless the agent can run under a fake clock.
+              -# Prove the fake clock takes effect by measuring the skew.
+              -# Report the observed vs real time and chart the offset.
+
+              @par Expected Results:
+              - Passes when libfaketime is there and the shim loads, skips
+                when it is not installed.
+              - A shim that was found but did not move the clock fails: the
+                skew check is what keeps the probe honest.
+        -->
+        <run name="clock">
+            <script name="clock">
+                <objective>
+                    Prove a fake clock takes effect.
+                    @md
+                </objective>
+            </script>
+        </run>
+    </session>
+</package>

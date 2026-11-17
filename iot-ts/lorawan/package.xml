@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>LoRaWAN frame codec: build, parse, verify and the counter-reuse audit, all in-process</description>
+    <author mailto="maxim.menshikov@interpretica.io" />
+    <session track_conf="silent">
+        <!-- @page iot-lorawan-prologue LoRaWAN group prologue
+              @objective Prepare the LoRaWAN group.
+
+              @par Scenario:
+              -# Nothing to do: the codec runs in-process, no agent or radio.
+        -->
+        <prologue>
+            <script name="prologue">
+                <objective>Prepare the LoRaWAN group.</objective>
+            </script>
+        </prologue>
+
+        <!-- @page iot-lorawan-epilogue LoRaWAN group epilogue
+              @objective Finalize the LoRaWAN group.
+        -->
+        <epilogue>
+            <script name="epilogue">
+                <objective>Finalize the LoRaWAN group.</objective>
+            </script>
+        </epilogue>
+
+        <!-- @page iot-lorawan-frames Frame round-trip
+              @objective Build, sign and encrypt a LoRaWAN frame, parse it
+                         back, verify the MIC and decrypt the payload, and
+                         assert the round-trip is exact across payload sizes.
+
+              @par Scenario:
+              -# Set up two session keys for the codec.
+              -# Start an MI logger for the codec-time curve.
+              -# Sweep uplink payload sizes: round-trip each and time it.
+              -# Emit the line-graph: codec time vs payload size.
+              -# Round-trip a downlink frame as well.
+        -->
+        <run>
+            <script name="frames">
+                <objective>
+                    An uplink and a downlink frame round-trip exactly through
+                    build/parse/verify/decrypt; codec time is charted against
+                    payload size.
+                </objective>
+            </script>
+        </run>
+
+        <!-- @page iot-lorawan-counter Counter-reuse audit
+              @objective Plant two uplinks that reuse a frame counter and
+                         assert the audit reports lorawan.counter-reuse, while
+                         a strictly-increasing pair stays clean.
+
+              @par Scenario:
+              -# Set up two session keys.
+              -# Plant the defect: two uplinks that reuse FCnt 7.
+              -# Parse the headers (no keys needed: FCnt is cleartext).
+              -# Show the keystream reuse the shared counter causes.
+              -# Audit the reused pair: it must flag lorawan.counter-reuse.
+              -# Audit a well-behaved pair: it must stay clean.
+        -->
+        <run>
+            <script name="counter">
+                <objective>
+                    The counter-reuse audit flags a reused FCnt as
+                    lorawan.counter-reuse and leaves an increasing counter
+                    alone.
+                </objective>
+            </script>
+        </run>
+    </session>
+</package>

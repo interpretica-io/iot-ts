@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>Bluetooth / BLE (tsf-bluetooth)</description>
+
+    <!-- @page iot-ble Bluetooth / BLE Group
+          @objective Drive the agent's Bluetooth adapter through tapi_bt
+                     (BlueZ bluetoothctl/btmon and friends) over a tapi_job
+                     factory, and read its security posture.
+
+          @par Test Groups:
+          - @ref iot-ble-scan - Device-discovery scan with a devices-found chart
+          - @ref iot-ble-audit - Bluetooth security posture, gated
+
+          @par Notes:
+          - There is no Bluetooth adapter on a stock host, so every test
+            asks tapi_bt_supports() / tapi_bt_available() and SKIPs
+            cleanly when the capability is absent.
+    -->
+
+    <author mailto="maxim.menshikov@interpretica.io" />
+
+    <session track_conf="silent">
+        <!-- @page iot-ble-prologue Bluetooth Group Prologue
+              @objective Prepare the Bluetooth group.
+
+              @par Scenario:
+              -# Nothing to do: each test opens its own factory to the agent.
+        -->
+        <prologue>
+            <script name="prologue">
+                <objective>Prepare the Bluetooth group.</objective>
+            </script>
+        </prologue>
+
+        <!-- @page iot-ble-epilogue Bluetooth Group Epilogue
+              @objective Finalize the Bluetooth group.
+        -->
+        <epilogue>
+            <script name="epilogue">
+                <objective>Finalize the Bluetooth group.</objective>
+            </script>
+        </epilogue>
+
+        <!-- @page iot-ble-scan Device-discovery scan
+              @objective Run a BLE device-discovery scan over a time window
+                         and chart how many devices were found.
+
+              @par Scenario:
+              -# Create an RPC job factory on the agent.
+              -# SKIP when the agent has no Bluetooth adapter.
+              -# Learn which backend the agent has.
+              -# SKIP when the backend cannot scan for devices.
+              -# Enumerate the adapter and log it.
+              -# Sweep the scan window and count devices discovered.
+              -# Emit a line-graph of devices discovered vs scan window.
+        -->
+        <run>
+            <script name="scan">
+                <objective>Discover devices in range and chart the count
+                           against the scan window.</objective>
+            </script>
+        </run>
+
+        <!-- @page iot-ble-audit Bluetooth security posture
+              @objective Read the agent's Bluetooth posture with tapi_bt_audit()
+                         and gate on it.
+
+              @par Scenario:
+              -# Create an RPC job factory on the agent.
+              -# SKIP when the agent has no Bluetooth adapter.
+              -# Learn which backend the agent has.
+              -# SKIP when the backend exposes no adapter to audit.
+              -# Read the Bluetooth posture into a report with the default policy.
+              -# Require the report to hold at least one finding.
+              -# Gate: fail on a HIGH finding.
+        -->
+        <run>
+            <script name="audit">
+                <objective>Read the Bluetooth security posture and gate on
+                           it.</objective>
+            </script>
+        </run>
+    </session>
+</package>

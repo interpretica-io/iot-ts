@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>WiFi station configuration (tsf-wifi /agent/wifi subtree)</description>
+
+    <!-- @page iot-wifi WiFi Tests
+          @objective Drive the /agent/wifi Configurator subtree to configure a
+                     WiFi station and confirm association; validate the
+                     standard/security notation unconditionally.
+
+          @par Test Groups:
+          - @ref iot-wifi-config - Configure a station and confirm association
+    -->
+
+    <author mailto="maxim.menshikov@interpretica.io" />
+
+    <session track_conf="silent">
+        <prologue>
+            <script name="prologue">
+                <objective>
+                    Prepare the WiFi group.
+                    @md
+                </objective>
+            </script>
+        </prologue>
+
+        <epilogue>
+            <script name="epilogue">
+                <objective>
+                    Finalize the WiFi group.
+                    @md
+                </objective>
+            </script>
+        </epilogue>
+
+        <!-- @page iot-wifi-config Configure a WiFi station
+              @objective Validate the WiFi standard/security notation, then
+                         (when a WiFi agent is present) configure a station and
+                         confirm association.
+
+              @par Scenario:
+              -# Validate the requested standard/security notation via
+                 tapi_cfg_wifi.
+              -# Require a WiFi agent carrying /agent/wifi; skip without one.
+              -# Configure the station and confirm association.
+
+              @par Expected Results:
+              - No WiFi agent: SKIPPED.
+              - WiFi agent present: association confirmed.
+        -->
+        <run>
+            <script name="config">
+                <objective>
+                    Configure a WiFi station and confirm association.
+                    @md
+                </objective>
+            </script>
+        </run>
+    </session>
+</package>

@@ -1,0 +1,132 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (C) 2026 Interpretica Unipessoal Lda
+#
+# External TE repositories catalog (passed to dispatcher.sh with
+# --external). builder.conf binds their libraries to platforms with
+# TE_EXT_REPO_USE. The commit actually built is recorded in
+# conf/builder.conf.lock; dispatcher.sh --update-external moves it on.
+#
+# While developing a library, point its url at a local checkout and set
+# ref to the branch you are on - git clones a filesystem path too.
+
+repositories:
+  # ---- Foundation chain (every audit reports through tapi_cybersec) ----
+  - name: tsf_devtool
+    url: https://github.com/interpretica-io/tsf-devtool.git
+    ref: main
+    libs:
+      - tapi_devtool
+  - name: tsf_kernel
+    url: https://github.com/interpretica-io/tsf-kernel.git
+    ref: main
+    libs:
+      - tapi_kernel
+  - name: tsf_cybersec
+    url: https://github.com/interpretica-io/tsf-cybersec.git
+    ref: main
+    libs:
+      - tapi_cybersec
+
+  # ---- Cross-cutting security layer ----
+  - name: tsf_fuzz
+    url: https://github.com/interpretica-io/tsf-fuzz.git
+    ref: main
+    libs:
+      - tapi_fuzz
+  - name: tsf_tls
+    url: https://github.com/interpretica-io/tsf-tls.git
+    ref: main
+    libs:
+      - tapi_tls
+  - name: tsf_time
+    url: https://github.com/interpretica-io/tsf-time.git
+    ref: main
+    libs:
+      - tapi_time
+
+  # ---- Engine-side protocol TAPIs (drive a tool / pure codec) ----
+  - name: tsf_mqtt
+    url: https://github.com/interpretica-io/tsf-mqtt.git
+    ref: main
+    libs:
+      - tapi_mqtt
+  - name: tsf_lorawan
+    url: https://github.com/interpretica-io/tsf-lorawan.git
+    ref: main
+    libs:
+      - tapi_lorawan
+  - name: tsf_802154
+    url: https://github.com/interpretica-io/tsf-802154.git
+    ref: main
+    libs:
+      - tapi_802154
+  - name: tsf_bluetooth
+    url: https://github.com/interpretica-io/tsf-bluetooth.git
+    ref: main
+    libs:
+      - tapi_bt
+  - name: tsf_cwmp
+    url: https://github.com/interpretica-io/tsf-cwmp.git
+    ref: main
+    libs:
+      - tapi_cwmp
+
+  # ---- Agent-side modules (ta_<x> + rpcs_<x> + tapi_<x>) ----
+  - name: tsf_coap
+    url: https://github.com/interpretica-io/tsf-coap.git
+    ref: main
+    libs:
+      - ta_coap
+      - rpcs_coap
+      - tapi_coap
+  - name: tsf_mdns
+    url: https://github.com/interpretica-io/tsf-mdns.git
+    ref: main
+    libs:
+      - ta_mdns
+      - rpcs_mdns
+      - tapi_mdns
+  - name: tsf_ics
+    url: https://github.com/interpretica-io/tsf-ics.git
+    ref: main
+    libs:
+      - ta_ics
+      - rpcs_ics
+      - tapi_ics
+  - name: tsf_gpio
+    url: https://github.com/interpretica-io/tsf-gpio.git
+    ref: main
+    libs:
+      - ta_gpio
+      - rpcs_gpio
+      - tapi_gpio
+  - name: tsf_sensors
+    url: https://github.com/interpretica-io/tsf-sensors.git
+    ref: main
+    libs:
+      - ta_sensors
+      - rpcs_sensors
+      - tapi_sensors
+  - name: tsf_watchdog
+    url: https://github.com/interpretica-io/tsf-watchdog.git
+    ref: main
+    libs:
+      - ta_watchdog
+      - rpcs_watchdog
+      - tapi_watchdog
+  - name: tsf_upnp
+    url: https://github.com/interpretica-io/tsf-upnp.git
+    ref: main
+    libs:
+      - ta_upnp
+      - rpcs_upnp
+      - tapi_upnp
+
+  # ---- WiFi: engine TAPI + Configurator model; agent half only on a
+  #      dedicated WiFi agent (inert on localhost) ----
+  - name: tsf_wifi
+    url: https://github.com/interpretica-io/tsf-wifi.git
+    ref: main
+    libs:
+      - tapi_cfg_wifi
+      - ta_wifi

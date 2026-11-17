@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>The CWMP codec, both directions, round-tripped without a network</description>
+    <author mailto="maxim.menshikov@interpretica.io" />
+    <session track_conf="silent">
+        <!-- @page cwmp-codec Codec round-trip
+              @objective Build every CWMP message and parse it back, so the
+                         CPE-direction codec is exercised with no ACS at all.
+        -->
+        <run>
+            <script name="roundtrip">
+                <objective>Inform, and each ACS request answered by the CPE, round-trip through the codec.</objective>
+            </script>
+        </run>
+    </session>
+</package>

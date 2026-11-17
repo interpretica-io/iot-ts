@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>IoT technologies demonstration suite</description>
+
+    <!-- @page iot-ts IoT Technologies Suite
+          @objective Exercise the major IoT technologies - messaging,
+                     constrained-device and discovery protocols, radio-frame
+                     codecs, short-range radio, embedded buses, industrial
+                     control and CPE management - end to end, each with a
+                     measurement chart and, where it applies, a security audit,
+                     against the agent the suite runs on.
+
+          @par Test Groups:
+          - @ref iot-mqtt       - MQTT publish/subscribe and broker audit (tsf-mqtt)
+          - @ref iot-coap       - CoAP discovery/GET and audit (tsf-coap)
+          - @ref iot-lorawan    - LoRaWAN frame codec, MIC and counter reuse (tsf-lorawan)
+          - @ref iot-ieee802154 - IEEE 802.15.4 frame codec and counter reuse (tsf-802154)
+          - @ref iot-mdns       - mDNS/DNS-SD discovery and audit (tsf-mdns)
+          - @ref iot-ble        - Bluetooth scan and audit (tsf-bluetooth)
+          - @ref iot-wifi       - WiFi station configuration (tsf-wifi)
+          - @ref iot-gpio       - GPIO/I2C/SPI bus access (tsf-gpio)
+          - @ref iot-sensors    - Hardware monitoring (tsf-sensors)
+          - @ref iot-watchdog   - Hardware watchdog (tsf-watchdog)
+          - @ref iot-ics        - Modbus/industrial control and audit (tsf-ics)
+          - @ref iot-cwmp       - TR-069 (CWMP) codec round-trip (tsf-cwmp)
+          - @ref iot-security   - Fuzzing and fake-clock hardening layer (tsf-fuzz, tsf-time)
+
+          @par Notes:
+          - The default localhost profile needs no radio, device or daemon:
+            pure-codec groups (lorawan, ieee802154, cwmp) and the fuzz layer
+            run; groups that need a broker, device, radio or bus SKIP cleanly
+            when none is configured. Point conf/rcf.conf (and the TSF_* env /
+            TA_WIFI_A_HOST) at real hardware and the same tests exercise it.
+          - Every audit plants a known-bad control next to it, so the
+            assertion is that the audit reports the planted defect; an audit
+            that reports nothing is the failure, not a pass.
+    -->
+
+    <author mailto="maxim.menshikov@interpretica.io" />
+
+    <session track_conf="silent">
+        <!-- @page iot-ts-prologue Test Suite Prologue
+              @objective Prepare the test environment.
+              @par Scenario:
+              -# Nothing to do: each test opens its own session to the agent.
+        -->
+        <prologue>
+            <script name="prologue">
+                <objective>
+                    Prepare the test environment.
+                    @md
+                </objective>
+            </script>
+        </prologue>
+
+        <!-- @page iot-ts-epilogue Test Suite Epilogue
+              @objective Finalize the test environment.
+        -->
+        <epilogue>
+            <script name="epilogue">
+                <objective>
+                    Finalize the test environment.
+                    @md
+                </objective>
+            </script>
+        </epilogue>
+
+        <run><package name="mqtt" /></run>
+        <run><package name="coap" /></run>
+        <run><package name="lorawan" /></run>
+        <run><package name="ieee802154" /></run>
+        <run><package name="mdns" /></run>
+        <run><package name="ble" /></run>
+        <run><package name="wifi" /></run>
+        <run><package name="gpio" /></run>
+        <run><package name="sensors" /></run>
+        <run><package name="watchdog" /></run>
+        <run><package name="ics" /></run>
+        <run><package name="cwmp" /></run>
+        <run><package name="security" /></run>
+    </session>
+</package>

@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>Hardware monitoring sensors</description>
+    <author mailto="maxim.menshikov@interpretica.io" />
+    <session track_conf="silent">
+        <prologue><script name="prologue"><objective>Prepare the sensors group.</objective></script></prologue>
+        <epilogue><script name="epilogue"><objective>Finalize the sensors group.</objective></script></epilogue>
+        <run><script name="list"><objective>Snapshot the hwmon readings and check them.</objective></script></run>
+    </session>
+</package>

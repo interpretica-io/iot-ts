@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>IEEE 802.15.4 frame codec and security posture</description>
+    <author mailto="maxim.menshikov@interpretica.io" />
+
+    <!-- @page iot-ieee802154 IEEE 802.15.4 frame codec
+          @objective Build and parse 802.15.4 frames with AES-CCM* security
+                     in-process, and prove the frame-counter-reuse audit
+                     catches a planted defect - all on a plain localhost,
+                     no radio.
+
+          @par Test Groups:
+          - @ref iot-ieee802154-frames - codec and AES-CCM* round-trip
+          - @ref iot-ieee802154-audit - the frame-counter-reuse audit
+    -->
+
+    <session track_conf="silent">
+        <!-- @page iot-ieee802154-prologue Group prologue
+              @objective Prepare the IEEE 802.15.4 group.
+
+              @par Scenario:
+              -# Nothing to do: each test builds its own frames in-process.
+        -->
+        <prologue>
+            <script name="prologue">
+                <objective>Prepare the IEEE 802.15.4 group.</objective>
+            </script>
+        </prologue>
+
+        <!-- @page iot-ieee802154-epilogue Group epilogue
+              @objective Finalize the IEEE 802.15.4 group.
+        -->
+        <epilogue>
+            <script name="epilogue">
+                <objective>Finalize the IEEE 802.15.4 group.</objective>
+            </script>
+        </epilogue>
+
+        <!-- @page iot-ieee802154-frames Codec and AES-CCM* round-trip
+              @objective Build an 802.15.4 data frame with AES-CCM*
+                         security, parse it back, and assert the MIC, the
+                         security fields and the payload all round-trip.
+
+              @par Scenario:
+              -# Prepare the network key and a payload pattern.
+              -# Build an unsecured data frame, parse it back and check the
+                 addresses, payload and checksum round-trip.
+              -# For every AES-CCM* security level, protect a payload, lay
+                 it on the wire, parse it back and recover the plaintext,
+                 checking the integrity code verifies.
+              -# Flip a byte of a protected frame and assert the integrity
+                 code rejects it with @c TE_EBADMSG.
+              -# Sweep the payload size and emit an MI line-graph of the
+                 on-wire frame length against the payload length.
+        -->
+        <run>
+            <script name="frames">
+                <objective>Build, secure, parse and verify a frame; sweep
+                           payload sizes into a line-graph.</objective>
+            </script>
+        </run>
+
+        <!-- @page iot-ieee802154-audit Frame-counter-reuse audit
+              @objective Craft a capture that reuses a frame counter and
+                         assert the audit reports it as
+                         ieee802154.counter-reuse.
+
+              @par Scenario:
+              -# Craft a capture of three secured frames from one device
+                 whose counters are 1, 2 and 2 - the last one planted.
+              -# Run tapi_802154_audit() over the crafted capture.
+              -# Assert the report holds a CRITICAL ieee802154.counter-reuse
+                 finding and yields a CRITICAL verdict.
+              -# Audit a clean capture (1, 2, 3) and assert no reuse finding
+                 is raised.
+        -->
+        <run>
+            <script name="audit">
+                <objective>Assert the audit catches a planted frame-counter
+                           reuse.</objective>
+            </script>
+        </run>
+    </session>
+</package>

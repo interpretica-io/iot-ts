@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>CoAP endpoint</description>
+    <author mailto="maxim.menshikov@interpretica.io" />
+    <session track_conf="silent">
+        <prologue><script name="prologue"><objective>Prepare the CoAP group.</objective></script></prologue>
+        <epilogue><script name="epilogue"><objective>Finalize the CoAP group.</objective></script></epilogue>
+        <run><script name="discover"><objective>Discover resources and GET one.</objective></script></run>
+        <run><script name="audit"><objective>Read the CoAP security posture and gate on it.</objective></script></run>
+    </session>
+</package>

@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>Hardware watchdog</description>
+    <author mailto="maxim.menshikov@interpretica.io" />
+    <session track_conf="silent">
+        <prologue><script name="prologue"><objective>Prepare the watchdog group.</objective></script></prologue>
+        <epilogue><script name="epilogue"><objective>Finalize the watchdog group.</objective></script></epilogue>
+        <run><script name="info"><objective>Read the watchdog identity and status (never arm).</objective></script></run>
+    </session>
+</package>

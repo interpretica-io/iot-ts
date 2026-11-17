@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<package version="1.0">
+    <description>MQTT client (tsf-mqtt): pub/sub latency and broker posture</description>
+    <author mailto="maxim.menshikov@interpretica.io" />
+    <session track_conf="silent">
+        <!-- @page iot-mqtt-prologue MQTT Group Prologue
+              @objective Prepare the MQTT group and report whether an MQTT
+                         client is on the agent.
+
+              @par Scenario:
+              -# Open an RPC server and a job factory on the agent.
+              -# RING whether tapi_mqtt_available() finds a client; leave the
+                 SKIP decision to each test.
+        -->
+        <prologue>
+            <script name="prologue">
+                <objective>Prepare the MQTT group.</objective>
+            </script>
+        </prologue>
+
+        <!-- @page iot-mqtt-epilogue MQTT Group Epilogue
+              @objective Finalize the MQTT group.
+        -->
+        <epilogue>
+            <script name="epilogue">
+                <objective>Finalize the MQTT group.</objective>
+            </script>
+        </epilogue>
+
+        <!-- @page iot-mqtt-pubsub Publish/subscribe round-trip latency
+              @objective Round-trip a sweep of payload sizes through a broker
+                         and graph the latency against payload size.
+
+              @par Scenario:
+              -# SKIP unless TSF_MQTT_HOST names a broker.
+              -# Open an RPC server and a job factory on the agent.
+              -# SKIP cleanly when there is no MQTT client on the agent.
+              -# Round-trip each payload size (retained publish, then collect)
+                 and record the latency.
+              -# Emit the latency-vs-payload MI line graph.
+        -->
+        <run>
+            <script name="pubsub">
+                <objective>Round-trip payload sizes and graph the latency.</objective>
+            </script>
+        </run>
+
+        <!-- @page iot-mqtt-audit Broker security posture
+              @objective Find out what a broker lets a stranger do and gate
+                         on the posture.
+
+              @par Scenario:
+              -# SKIP unless TSF_MQTT_HOST names a broker.
+              -# Open an RPC server and a job factory on the agent.
+              -# SKIP cleanly when there is no MQTT client on the agent.
+              -# Read the broker posture into a report (anonymous access,
+                 wildcard subscribe, no-TLS, $SYS/retained readable),
+                 read-only with nothing published.
+              -# Fail on a finding at least HIGH.
+        -->
+        <run>
+            <script name="audit">
+                <objective>Read the broker security posture and gate on it.</objective>
+            </script>
+        </run>
+    </session>
+</package>
