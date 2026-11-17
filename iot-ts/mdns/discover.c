@@ -33,7 +33,7 @@ main(int argc, char **argv)
     bool report_ready = false;
     int responders = 0;
     int records = 0;
-    te_errno rc;
+    /* rc is provided by TEST_START */
 
     TEST_START;
 

@@ -109,6 +109,12 @@ RUN set -eux; \
       'Cflags: -I${includedir}' \
       > /usr/lib/x86_64-linux-gnu/pkgconfig/libsensors.pc
 
+# libfaketime: the LD_PRELOAD shim the security/clock test runs a program
+# under to prove expiry/rollover handling. Its own layer so the big apt
+# layer above stays cached.
+RUN apt-get update && apt-get install -y libfaketime && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN echo "${USER} ALL=NOPASSWD: ALL" >> /etc/sudoers
 
 RUN if [ "$DOCKER_GID" != "${GID}" ] ; then groupadd --gid ${GID} ${USER} ; fi
